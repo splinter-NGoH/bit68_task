@@ -1,0 +1,72 @@
+version: '3'
+
+volumes:
+  bit68_project_local_postgres_data: {}
+  bit68_project_local_postgres_data_backups: {}
+  static_volume:
+  media_volume:
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: bit68_project_local_django
+    container_name: bit68_project_local_django
+    platform: linux/x86_64
+    depends_on:
+      - postgres
+      - mailhog
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    expose:
+      - "8000"
+    command: /start
+    networks:
+            - bit68_project-api
+
+  postgres:
+    build:
+        context: .
+        dockerfile: ./compose/production/postgres/Dockerfile
+    container_name: postgres_bit68
+    volumes:
+        - bit68_project_local_postgres_data:/var/lib/postgresql/data
+        - bit68_project_local_postgres_data_backups:/backups
+    env_file:
+        - ./.envs/.local/.postgres
+
+    networks:
+            - bit68_project-api
+
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: bit68_project_local_mailhog
+    ports:
+      - "8025:8025"
+    networks:
+            - bit68_project-api
+
+  nginx:
+    restart: always
+    depends_on:
+        - api
+    volumes:
+        - static_volume:/app/staticfiles
+        - media_volume:/app/mediafiles
+    build:
+        context: ./compose/local/nginx
+        dockerfile: Dockerfile
+    ports:
+        - "8080:80"
+    networks:
+            - bit68_project-api
+networks:
+    bit68_project-api:
+        driver: bridge
