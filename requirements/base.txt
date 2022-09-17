@@ -31,7 +31,7 @@ phonenumbers==8.12.33
 
 djoser==2.1.0
 djangorestframework-simplejwt==4.8.0
-PyJWT==2.1.0
+PyJWT==2.5.0
 # DRF-spectacular for api documentation
 drf-spectacular==0.24.0  # https://github.com/tfranzel/drf-spectacular
 
