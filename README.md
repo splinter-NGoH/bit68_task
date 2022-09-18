@@ -130,7 +130,7 @@ With MailHog running, to view messages that are sent by your application, open y
 
 ## Deployment
 
-The following details how to deploy this application.
+The following details how to deploy this application .
 
 ### Heroku
 
