@@ -23,7 +23,7 @@ django-filter==21.1
 django-autoslug==1.9.8
 django-countries==7.2.1
 django-phonenumber-field==5.2.0
-phonenumbers==8.12.33
+phonenumbers==8.13.2
 
 
 
